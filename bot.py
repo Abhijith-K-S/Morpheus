@@ -3,7 +3,7 @@ import telebot
 from PIL import Image
 import os
 
-api_token = os.environ["API_TOKEN"]
+api_token = key.API_TOKEN
 bot = telebot.TeleBot(api_token,parse_mode=None)
 
 #commands
