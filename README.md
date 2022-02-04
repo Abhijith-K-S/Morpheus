@@ -1,10 +1,16 @@
 # Morpheus :sunglasses:
 Morpheus is a telegram bot that helps to simplify the process of making custom telegram stickers.
 
-As you may know, Telegram's official [Stickers bot](https://telegram.me/stickers) has strict requirements for a image to be made as a sticker. Morepheus helps to avoid this hassle. Simply send and image to Morpheus and it will return an image (that fulfills the requirements of the telegram overlords :grinning:), which you can forward to the sticker bot.
+As you may know, Telegram's official [Stickers bot](https://telegram.me/stickers) has strict requirements for a file to be made as a sticker. Morepheus helps to avoid this hassle. 
+
+Simply send a file <b>(image for regular stickers and video for animated stickers)</b> and morpheus will return the suitable file (that fulfills the requirements of the telegram overlords :grinning:), which you can forward to the sticker bot.
 
 ## Demo
 ![Demo gif](./images/demo.gif)
+
+
+## Prerequisites
+Requires [ffmpeg](https://ffmpeg.org) installed in the device
 
 
 ## Installation
