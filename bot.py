@@ -10,12 +10,13 @@ api_token = key.API_TOKEN
 bot = telebot.TeleBot(api_token,parse_mode=None)
 
 bot.remove_webhook()
+print("Morpheus v1.1 -> online")
 
 #commands
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     if(message.text=="start"):
-	    bot.reply_to(message, "Send me a picture/video to make sticker/animated sticker")
+	    bot.reply_to(message, "Send me a image/video/gif to make sticker/animated sticker")
     else:
         bot.reply_to(message, "1.To make regular sticker, send an image in *png* or *jpg* format \n\n2.To make animated sticker send a video file in *mp4* or *webm* format \n\nNote: If the duration of the video file is more than 3 seconds, the file will be trimmed to the first 3 seconds",parse_mode="Markdown")
 
@@ -52,21 +53,21 @@ def documentAnalyzer(message):
 
 
 #handling videos
-@bot.message_handler(content_types=['video'])
+@bot.message_handler(content_types=['video','animation'])
 def video(message):
-    fileID = message.video.file_id
+    if(message.content_type=='video'):
+        fileID = message.video.file_id
+    else:
+        fileID = message.animation.file_id
+
     print('fileID =',fileID)
     file_info = bot.get_file(fileID)
     print('file.file_path = ',file_info.file_path)
 
     downloaded_file = bot.download_file(file_info.file_path)
-    fileExtension = file_info.file_path.lower()
+    filename = file_info.file_path.lower()
 
-    if(fileExtension.endswith(('.mp4'))):
-        videoConverter(message,downloaded_file,"mp4")
-    
-    elif(fileExtension.endswith(('.webm'))):
-        videoConverter(message,downloaded_file,".webm")
+    videoConverter(message,downloaded_file,filename[filename.rfind('.')+1:])
 
 
 #video processing function
