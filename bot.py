@@ -10,7 +10,7 @@ api_token = key.API_TOKEN
 bot = telebot.TeleBot(api_token,parse_mode=None)
 
 bot.remove_webhook()
-print("Morpheus v1.1 -> online")
+print("Morpheus v1.2 => Online")
 
 #commands
 @bot.message_handler(commands=['start', 'help'])
@@ -18,7 +18,7 @@ def send_welcome(message):
     if(message.text=="start"):
 	    bot.reply_to(message, "Send me a image/video/gif to make sticker/animated sticker")
     else:
-        bot.reply_to(message, "1.To make regular sticker, send an image in *png* or *jpg* format \n\n2.To make animated sticker send a video file in *mp4* or *webm* format \n\nNote: If the duration of the video file is more than 3 seconds, the file will be trimmed to the first 3 seconds",parse_mode="Markdown")
+        bot.reply_to(message, "1.To make regular sticker, send an image in *png* or *jpg* format \n\n2.To make animated sticker send a *gif* file or a video file in *mp4* or *webm* format \n\nNote: If the duration of the video file is more than 3 seconds, the file will be trimmed to the first 3 seconds",parse_mode="Markdown")
 
 
 #other cases
@@ -113,7 +113,7 @@ def videoConverter(message,downloaded_file,fileExtension):
                 widthNew=widthNew+1
             elif(heightNew!=512 and heightNew%2!=0):
                 heightNew=heightNew+1
-            processCommand = processCommand +" -vf scale="+str(widthNew)+":"+str(heightNew)+" -preset slow -crf 18"
+            processCommand = processCommand +" -vf scale="+str(widthNew)+":"+str(heightNew)
         else:
             widthNew = width
             heightNew = height
@@ -129,10 +129,8 @@ def videoConverter(message,downloaded_file,fileExtension):
         timeDuration=float(duration)
 
         if(timeDuration>3.00):
-            timeDuration=3.00
             processCommand = processCommand+" -ss 00:00:00 -to 00:00:02.80"
     
-
     #trim or resize
     processCommand = processCommand+" tmp."+fileExtension
     modify = subprocess.Popen(processCommand,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -150,7 +148,7 @@ def videoConverter(message,downloaded_file,fileExtension):
     print("Audio removal complete")
 
     #encode to webm
-    processCommand = "ffmpeg -y -i tmp2."+fileExtension+" -c:v libvpx-vp9 -crf 30 -b:v 0 -c:a libopus tmp3.webm"
+    processCommand = "ffmpeg -y -i tmp2."+fileExtension+" -c:v libvpx-vp9 -crf 25 -b:v 720k -c:a libopus tmp3.webm"
     modify = subprocess.Popen(processCommand,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     output,err = modify.communicate()
     modify.wait()
