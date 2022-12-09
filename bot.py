@@ -2,7 +2,6 @@ import key
 import telebot
 import video
 import image
-import common
 
 api_token = key.API_TOKEN
 bot = telebot.TeleBot(api_token,parse_mode=None)
