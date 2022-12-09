@@ -2,19 +2,18 @@ import key
 import telebot
 import video
 import image
-
+import common
 
 api_token = key.API_TOKEN
 bot = telebot.TeleBot(api_token,parse_mode=None)
 
-bot.remove_webhook()
-print("Morpheus v1. => Online")
+print("Morpheus v1.2 => Online")
 
 #commands
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     if(message.text=="start"):
-	    bot.reply_to(message, "Send me a image/video/gif to make sticker/animated sticker")
+        bot.reply_to(message, "Send me a image/video/gif to make sticker/animated sticker")
     else:
         bot.reply_to(message, "1.To make regular sticker, send an image in *png* or *jpg* format \n\n2.To make animated sticker send a *gif* file or a video file in *mp4* or *webm* format \n\nNote: If the duration of the video file is more than 3 seconds, the file will be trimmed to the first 3 seconds",parse_mode="Markdown")
 
@@ -60,23 +59,26 @@ def documentAnalyzer(message):
 def videoAndAnimation(message):
     if(message.content_type=='video'):
         fileID = message.video.file_id
-        filename = message.video.file_name
+        mime_type = message.video.mime_type
+        fileExtension = str(mime_type[mime_type.rfind('/')+1:])
         width = message.video.width
         height = message.video.height
+        duration = message.video.duration
         fileSize = message.video.file_size
     else:
         fileID = message.animation.file_id
-        filename = message.animation.file_name
+        mime_type = message.animation.mime_type
+        fileExtension = str(mime_type[mime_type.rfind('/')+1:])
         width = message.animation.width
         height = message.animation.height
+        duration = message.animation.duration
         fileSize = message.animation.file_size
 
     print('fileID =',fileID)
     file_info = bot.get_file(fileID)
     print('file.file_path = ',file_info.file_path)
-
     downloaded_file = bot.download_file(file_info.file_path)
-    video.videoConverter(bot,message,downloaded_file,filename[filename.rfind('.')+1:],width,height,fileSize)
+    video.videoConverter(bot,message,downloaded_file,fileExtension,width,height,duration,fileSize)
 
 
 #handling images
