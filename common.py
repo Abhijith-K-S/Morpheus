@@ -1,3 +1,10 @@
+from datetime import datetime
+
+#generate unique filename
+def generateFileName(username):
+    dt_string = datetime.now().strftime("%d%m%Y%H%M%S")
+    return username+"_"+dt_string
+
 #function to get new dimensions
 def getNewDimensions(width,height):
     if(width>height):
