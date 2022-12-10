@@ -6,6 +6,8 @@ As you may know, Telegram's official [Stickers bot](https://telegram.me/stickers
 
 Simply send a file <b>(image for regular stickers and video for animated stickers)</b> and morpheus will return the suitable file (that fulfills the requirements of the telegram overlords :grinning:), which you can forward to the sticker bot.
 
+Try out the bot: [@morpheus_stickerbot](https://telegram.me/morpheus_stickerbot)
+
 ## Demo
 
 ![Demo gif](./images/demo.gif)
