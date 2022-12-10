@@ -1,6 +1,7 @@
 import subprocess
 import common
 import os
+import psutil
 
 #video processing function
 def videoConverter(bot,message,downloaded_file,fileExtension,width,height,duration,fileSize):
@@ -53,10 +54,47 @@ def videoConverter(bot,message,downloaded_file,fileExtension,width,height,durati
     modify.wait()
     print("Encoded to webm")
 
-    newFilesize = os.stat(outputFileName).st_size
-    print(newFilesize)  
+    newFileSize = os.stat(outputFileName).st_size 
 
     result = open(outputFileName,"rb")
     bot.send_document(message.chat.id,result)
-    result = common.operationSuccess(widthNew,heightNew,round(newFilesize/1024,2))
+    result = common.operationSuccess(widthNew,heightNew,round(newFileSize/1024,2))
     bot.send_message(message.chat.id,result,parse_mode="Markdown")
+
+    # Get a list of processes that have the input file open
+    open_procs = []
+    for proc in psutil.process_iter():
+        try:
+            files = proc.open_files()
+            if any(file.path == inputFileName for file in files):
+                open_procs.append(proc)
+        except psutil.AccessDenied:
+            continue
+
+    # Print the list of processes that have the input file open
+    if open_procs:
+        print(f"The following processes have '{inputFileName}' open:")
+        for proc in open_procs:
+            print(f"- PID {proc.pid}: {proc.name()}")
+    else:
+        print(f"No processes have '{inputFileName}' open.")
+        os.remove(inputFileName)
+
+    # Get a list of processes that have the output file open
+    open_procs = []
+    for proc in psutil.process_iter():
+        try:
+            files = proc.open_files()
+            if any(file.path == outputFileName for file in files):
+                open_procs.append(proc)
+        except psutil.AccessDenied:
+            continue
+
+    # Print the list of processes that have the output file open
+    if open_procs:
+        print(f"The following processes have '{outputFileName}' open:")
+        for proc in open_procs:
+            print(f"- PID {proc.pid}: {proc.name()}")
+    else:
+        print(f"No processes have '{outputFileName}' open.")
+        os.remove(outputFileName)
