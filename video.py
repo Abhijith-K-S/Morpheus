@@ -49,7 +49,8 @@ def videoConverter(bot,message,downloaded_file,fileExtension,width,height,durati
     #vp9 encoding
     processCommand = processCommand+" -an -c:v libvpx-vp9 -crf 25 -b:v 720k -c:a libopus "+outputFileName
 
-    modify = subprocess.Popen(processCommand,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    ffmpegInput = processCommand.split(" ")
+    modify = subprocess.Popen(ffmpegInput,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     output,err = modify.communicate()
     modify.wait()
     print("Encoded to webm")
