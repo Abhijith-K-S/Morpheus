@@ -6,7 +6,7 @@ import image
 api_token = key.API_TOKEN
 bot = telebot.TeleBot(api_token,parse_mode=None)
 
-print("Morpheus v1.2 => Online")
+print("Morpheus v1.3 => Online")
 
 #commands
 @bot.message_handler(commands=['start', 'help'])
@@ -26,17 +26,14 @@ def improper(message):
 #files as documents
 @bot.message_handler(content_types=['document'])
 def documentAnalyzer(message):
-    print(message.document.file_id)
     fileID = message.document.file_id
-    print('fileID =', fileID)
     file_info = bot.get_file(fileID)
-    print('file.file_path =', file_info.file_path)
 
     downloaded_file = bot.download_file(file_info.file_path)
     
     mime_type = message.document.mime_type
     fileType = str(mime_type[:mime_type.rfind('/')])
-    print(fileType)
+
     if(fileType!="image" and fileType!="video"):
         bot.reply_to(message,"*Please send a valid file!!*",parse_mode="Markdown")
 
@@ -73,9 +70,7 @@ def videoAndAnimation(message):
         duration = message.animation.duration
         fileSize = message.animation.file_size
 
-    print('fileID =',fileID)
     file_info = bot.get_file(fileID)
-    print('file.file_path = ',file_info.file_path)
     downloaded_file = bot.download_file(file_info.file_path)
     video.videoConverter(bot,message,downloaded_file,fileExtension,width,height,duration,fileSize)
 
@@ -88,9 +83,7 @@ def photo(message):
     height = message.photo[-1].height
     fileSize = message.photo[-1].file_size
 
-    print('fileID =', fileID)
     file_info = bot.get_file(fileID)
-    print('file.file_path =', file_info.file_path)
 
     downloaded_file = bot.download_file(file_info.file_path)
     image.imageConverter(bot,message,downloaded_file,width,height,fileSize)
