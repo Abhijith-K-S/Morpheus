@@ -87,6 +87,3 @@ def photo(message):
 
     downloaded_file = bot.download_file(file_info.file_path)
     image.imageConverter(bot,message,downloaded_file,width,height,fileSize)
-
-
-bot.infinity_polling()
