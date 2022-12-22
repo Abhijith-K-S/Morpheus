@@ -21,7 +21,15 @@ def webhook():
     else:
         abort(403)
 
-bot.set_webhook('{URL}:{PORT}/{HOOK}/'.format(URL=WEBHOOK_URL, PORT=WEBHOOK_PORT, HOOK=API_TOKEN))
+
+@app.route('/set_webhook', methods=['GET', 'POST'])
+def set_webhook():
+    s = bot.set_webhook('{URL}:{PORT}/{HOOK}/'.format(URL=WEBHOOK_URL, PORT=WEBHOOK_PORT, HOOK=API_TOKEN))
+
+    if s:
+        return "Webhook setup OK"
+    else:
+        return "Webhook setup failed"
 
 if __name__ == '__main__':
     app.run(port=WEBHOOK_PORT,threaded=True)
